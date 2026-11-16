@@ -77,14 +77,12 @@ app.post('/tasks', (req, res) => {
     res.status(201).json(new_task);
 })
 
-//Stage 4
-
+//Stage 3
 app.put('/tasks/:id', (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find((t) => t.id === id);
-
     const { title, done } = req.body;
 
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
     if (!task) {
         return res.status(404).json({ error: `Task ${id} not found` })
     }
@@ -97,33 +95,36 @@ app.put('/tasks/:id', (req, res) => {
         if (title === "" || title === null || typeof title !== 'string') {
             return res.status(400).json({ error: "Invalid Title" })
         };
-        task.title = title;
     };
 
     if (done !== undefined) {
-        if (typeof done !== 'boolean') {
+        if (done !== 0 && done !== 1) {
             return res.status(400).json({ error: "Invalid Done value" })
-        };
-        task.done = done;
+        }
     };
 
-    res.status(200).json(task);
+    const newTitle = title !== undefined ? title : task.title;
+    const newDone = done !== undefined ? done : task.done;
+
+    db.prepare('UPDATE tasks SET title = ?, done = ? WHERE id = ?')
+        .run(newTitle, newDone, id)
+
+    const updatedTask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+
+    res.status(200).json(updatedTask);
 })
 
 app.delete('/tasks/:id', (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.findIndex((t) => t.id === id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
 
-    if (task === -1) {
+    if (!task) {
         return res.status(404).json({ error: `Task ${id} not found` })
     }
 
-    tasks.splice(task, 1);
+    db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
     res.status(204).send();
 })
-
-
-
 
 
 app.listen(port, () => {
