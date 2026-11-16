@@ -1,0 +1,18 @@
+{
+  "name": "week2",
+  "version": "1.0.0",
+  "description": "first CRUD api for Flyrank Internship",
+  "license": "ISC",
+  "author": "John Benedict L. Aguirre",
+  "type": "commonjs",
+  "main": "middleware.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.2.0",
+    "express": "^5.2.1",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
