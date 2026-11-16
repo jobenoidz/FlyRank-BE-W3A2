@@ -10,6 +10,7 @@ const port = 3000;
 app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 
+//Stage 0
 db.exec(`
 CREATE TABLE IF NOT EXISTS tasks (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +35,6 @@ if (count === 0) {
     });
     insertMany(INIT_TASKS);
 }
-//Stage 1
 app.get('/', (req, res) => {
     res.json({ "name": "Task API", "version": "1.0", "endpoints": ["/tasks"] });
 });
@@ -43,8 +43,7 @@ app.get('/health', (req, res) => {
     res.send({ "status": "ok" });
 });
 
-
-//Stage 2
+//Stage 1
 app.get('/tasks', (req, res) => {
     tasks = db.prepare('SELECT * FROM tasks').all();
     res.send(tasks);
@@ -52,7 +51,7 @@ app.get('/tasks', (req, res) => {
 
 app.get('/tasks/:id', (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find((t) => t.id === id);
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
 
     if (!task) {
         return res.status(404).json({ error: `Task ${id} not found` })
