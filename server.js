@@ -60,9 +60,7 @@ app.get('/tasks/:id', (req, res) => {
     res.json(task)
 })
 
-
-
-//Stage 3
+//Stage 2
 app.post('/tasks', (req, res) => {
     if (req.body === undefined || req.body === null || typeof req.body !== 'object') {
         return res.status(400).json({ error: "Missing body" })
@@ -73,10 +71,9 @@ app.post('/tasks', (req, res) => {
         return res.status(400).json({ error: "Title missing" })
     };
 
-    const last_id = tasks.length === 0 ? 0 : Math.max(...tasks.map((t) => t.id));
-    const new_task = { id: (last_id + 1), title: title, done: false };
+    const new_task = db.prepare('INSERT INTO tasks (title, done) VALUES (@title, @done)');
+    new_task.run({ title: title, done: 0 });
 
-    tasks.push(new_task);
     res.status(201).json(new_task);
 })
 
