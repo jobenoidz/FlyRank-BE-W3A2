@@ -1,11 +1,9 @@
-# FlyRank-BE-W2A1
-First CRUD API Assignment for FlyRank Backend Internship
+# FlyRank-BE-W3A2
+Adding Database to CRUD API Assignment for FlyRank Backend Internship
 
-This repo contains a sample CRUD API for a to-do list where a user can view, create, update, or delete a task. SwaggerUI is also included to provide a GUI for testing the different endpoints of the API.
+This repo contains a sample CRUD API for a to-do list where a user can view, create, update, or delete a task, with the addition of using SQLite as a database.
 
 ## Installation Instructions
-
-# Installation
 
 1. **Clone the repository**
    ```bash
@@ -14,7 +12,7 @@ This repo contains a sample CRUD API for a to-do list where a user can view, cre
 
 2. **Navigate to the project folder**
    ```bash
-   cd FlyRank-BE-W2A1
+   cd FlyRank-BE-W3A2
    ```
 
 3. **Install dependencies**
@@ -42,32 +40,15 @@ This repo contains a sample CRUD API for a to-do list where a user can view, cre
 | PUT | `/tasks/{id}` | Update existing task | 200 | 400, 404 |
 | DELETE | `/tasks/{id}` | Delete task by id | 204 | 404 |
 
-## Sample `curl` output
+## Why SQLite?
+SQLite was chosen because it provides a database packaged alongside the application. It allows data to be stored to a file, so that data does not get cleared whenever the server restarts.
 
-For Windows CMD:
-```bash
-curl -i -X POST http://localhost:3000/tasks -H "Content-Type: application/json" -d "{\"title\":\"Buy milk\"}"
-```
+The data lives in a file called tasks.db, which is created automatically if it does not exist yet. Since the creation of the .db files are usually included in the code, these files are also usually added to the .gitignore file.
 
-For Linux\macOS:
-```bash
-curl -i -X POST http://localhost:3000/tasks -H "Content-Type: application/json" -d '{"title":"Buy milk"}'
-```
+## Screenshots
 
-Response after running ```curl -i``` command:
-```bash
-HTTP/1.1 201 Created
-X-Powered-By: Express
-Content-Type: application/json; charset=utf-8
-Content-Length: 40
-ETag: W/"28-PpSBYV7i68cXyGc7AhjVpkZkY5Q"
-Date: Sat, 19 Sep 2026 10:45:52 GMT
-Connection: keep-alive
-Keep-Alive: timeout=5
+### DB Browser Preview
+![DB Browser Screenshot](tasks-screenshot.png)
 
-{"id":4,"title":"Buy milk","done":false}
-```
-
-## SwaggerUI Preview
-
-![SwaggerUI Screenshot](screenshot.png)
+### Sample Query
+![Sample Query Screenshot](query-screenshot.png)
